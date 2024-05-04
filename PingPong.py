@@ -4,6 +4,7 @@ win_widgh, win_height = 700, 500
 window = display.set_mode((win_widgh, win_height))
 display.set_caption('Maze')
 game = True
+finish = True
 
 background = transform.scale(image.load('Обои.jpg'), (win_widgh, win_height))
 
@@ -56,48 +57,54 @@ FPS = 60
 
 #Игровой цикл:
 while game:
-    window.blit(background, (0, 0))
+    if finish:
+        window.blit(background, (0, 0))
 
-    clock.tick(FPS)
-    for e in event.get():
-        if e.type == QUIT:
-            game = False
+        clock.tick(FPS)
+        for e in event.get():
+            if e.type == QUIT:
+                game = False
 
-    if sprite.collide_rect(ball, player1) or sprite.collide_rect(ball, player2):
-        speed_x *= -1
-    
-    if ball.rect.x < 0:
-        score_2 += 1
-        ball.rect.x = 300
-        ball.rect.y = 200
-        speed_x = 5
-        speed_y = 3
-    if ball.rect.x > win_widgh - ball.size_x:
-        score_1 += 1
-        ball.rect.x = 300
-        ball.rect.y = 200
-        speed_x = -5
-        speed_y = 3
-    
-    score = font.render(f'Score: < {score_1} >< {score_2} >', True, (195, 28, 214))
-    window.blit(score, (180, 5))
-
-    if score_2 >= 5:
-        window.blit(player2_win, (220, 200))
-    elif score_1 >= 5:
-        window.blit(player1_win, (220, 200))
+        if sprite.collide_rect(ball, player1) or sprite.collide_rect(ball, player2):
+            speed_x *= -1
         
-    if ball.rect.y < 0 or ball.rect.y > win_height - ball.size_y:
-        speed_y *= -1
-    ball.rect.x += speed_x
-    ball.rect.y += speed_y
+        if ball.rect.x < 0:
+            score_2 += 1
+            ball.rect.x = 300
+            ball.rect.y = 200
+            speed_x = 5
+            speed_y = 3
+        if ball.rect.x > win_widgh - ball.size_x:
+            score_1 += 1
+            ball.rect.x = 300
+            ball.rect.y = 200
+            speed_x = -5
+            speed_y = 3
+        
+        score = font.render(f'Score: < {score_1} >< {score_2} >', True, (195, 28, 214))
+        window.blit(score, (180, 5))
 
-    player1.reset()
-    player2.reset()
-    ball.reset()
+        if score_2 >= 5:
+            window.blit(player2_win, (220, 200))
+            finish = False
+        elif score_1 >= 5:
+            window.blit(player1_win, (220, 200))
+            finish = False
+            
+        if ball.rect.y < 0 or ball.rect.y > win_height - ball.size_y:
+            speed_y *= -1
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
 
-    player1.update1()
-    player2.update2()
+        player1.reset()
+        player2.reset()
+        ball.reset()
 
-    key_pressed = key.get_pressed()
-    display.update()
+        player1.update1()
+        player2.update2()
+
+        key_pressed = key.get_pressed()
+        display.update()
+    else:
+        score_1, score_2 = 0, 0
+        finish = True

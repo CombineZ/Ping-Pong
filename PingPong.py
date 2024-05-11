@@ -2,7 +2,8 @@ from pygame import *
 #Игровая сцена:
 win_widgh, win_height = 700, 500
 window = display.set_mode((win_widgh, win_height))
-display.set_caption('Maze')
+display.set_caption('Ping Pong')
+display.set_icon(image.load('Icon.png'))
 game = True
 finish = True
 
